@@ -21,8 +21,8 @@
 import CharacterList from "@/components/CharacterList.vue";
 import FilterControls from "@/components/FilterControls.vue";
 import PaginationControl from "@/components/PaginationControl.vue";
-import { fetchCharacters } from "@/services/apiService";
-import { fetchCharactersById } from '@/services/apiService';
+import { fetchCharacters, fetchCharactersById } from '@/services/apiService';
+
 
 
 export default {
@@ -38,7 +38,7 @@ export default {
       filteredCharacters: [],
       totalPages: 1,
       currentPage: 1,
-      pageSize: 6
+      pageSize: 6,
     };
   },
   computed: {
@@ -80,7 +80,11 @@ export default {
       } catch (error) {
         console.error('Error fetching character details:', error);
       }
-    }
+    },
+    resetFilters() {
+    this.filteredCharacters = this.characters;
+    this.currentPage = 1;
+  },
   },
   mounted() {
     this.fetchCharacters();

@@ -7,7 +7,7 @@
         <option value="">All</option>
         <option value="Alive">Alive</option>
         <option value="Dead">Dead</option>
-        <option value="Unknown">Unknown</option>
+        <option value="unknown">Unknown</option>
       </select>
       <button class="btn btn-success" @click="applyFilters">Apply</button>
   </div>
