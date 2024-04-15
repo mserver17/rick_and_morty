@@ -6,7 +6,7 @@
     <main>
       <div class="container">
         <FilterControls @apply-filters="applyFilters" />
-        <CharacterList :characters="paginatedCharacters" />
+        <CharacterList :characters="paginatedCharacters" @show-character-details="showCharacterDetails" />
         <PaginationControl
           :totalPages="computedTotalPages"
           :currentPage="currentPage"
@@ -20,23 +20,25 @@
 <script>
 import CharacterList from "@/components/CharacterList.vue";
 import FilterControls from "@/components/FilterControls.vue";
-import PaginationControl from "@/components/PaginationControl.vue"; // Обновленный импорт
+import PaginationControl from "@/components/PaginationControl.vue";
 import { fetchCharacters } from "@/services/apiService";
+import { fetchCharactersById } from '@/services/apiService';
+
 
 export default {
   name: "App",
   components: {
     CharacterList,
     FilterControls,
-    PaginationControl // Обновленное использование переименованного компонента
+    PaginationControl,
   },
   data() {
     return {
-      characters: [], // Список персонажей
-      filteredCharacters: [], // Отфильтрованный список персонажей
-      totalPages: 10, // Примерное значение
-      currentPage: 1 ,
-      pageSize: 5 // Определение размера страницы
+      characters: [],
+      filteredCharacters: [],
+      totalPages: 1,
+      currentPage: 1,
+      pageSize: 6
     };
   },
   computed: {
@@ -47,23 +49,21 @@ export default {
       const startIndex = (this.currentPage - 1) * this.pageSize;
       const endIndex = startIndex + this.pageSize;
       return this.filteredCharacters.slice(startIndex, endIndex);
-    },
-    
+    }
   },
-
   methods: {
     async fetchCharacters() {
       try {
-        const data = await fetchCharacters();
+        const data = await fetchCharacters(this.currentPage);
         this.characters = data.results;
-        this.filteredCharacters = data.results; // Начальная инициализация отфильтрованного списка
+        this.filteredCharacters = data.results;
+        this.totalPages = data.info.pages;
       } catch (error) {
         console.error('Error fetching characters:', error);
       }
     },
     applyFilters(filters) {
       this.filteredCharacters = this.characters.filter(character => {
-       
         const nameMatch = character.name.toLowerCase().includes(filters.name.toLowerCase());
         const statusMatch = filters.status ? character.status === filters.status : true;
         return nameMatch && statusMatch;
@@ -71,37 +71,27 @@ export default {
       this.currentPage = 1;
     },
     changePage(page) {
-
       this.currentPage = page;
+    },
+    async showCharacterDetails(character) {
+      try {
+        const response = await fetchCharactersById(character.id);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching character details:', error);
+      }
     }
   },
   mounted() {
-   this.characters = [
-      { id: 1, name: "Rick", status: "Alive" },
-      { id: 2, name: "Morty", status: "Alive" },
-    ];
-    this.pageSize = 6;
-    this.filteredCharacters = this.characters;
     this.fetchCharacters();
-    this.totalPages = Math.ceil(this.filteredCharacters.length / this.pageSize);
   }
 };
 </script>
-
-
 
 <style>
 #app {
   font-family: Arial, sans-serif;
   margin: 20px;
-
-}
-
-body {
-  background-color: #2d4375; /* Здесь можно указать любой цвет фона */
-  margin: 0;
-  padding: 0;
-  color: #ffffff;
 }
 
 header {
@@ -116,7 +106,5 @@ h1 {
 
 main {
   margin-top: 20px;
- 
 }
-
 </style>

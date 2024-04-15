@@ -1,11 +1,12 @@
 <!-- CharacterCard.vue -->
 <template>
-    <div class="character-card">
-      <img :src="character.image" alt="Character Image" />
-      <h3>{{ character.name }}</h3>
-      <p>Status: {{ character.status }}</p>
-      <p>Species: {{ character.species }}</p>
-      
+    <div class="character-card card-title pt-4 custom-bg-color">
+      <img class="card-img-top mb-5" :src="character.image" alt="Character Image" />
+        <div class="character-info">
+          <h3>{{ character.name }}</h3>
+          <p>Status: {{ character.status }}</p>
+          <p>Species: {{ character.species }}</p>
+        </div>
     </div>
   </template>
   
@@ -31,5 +32,12 @@
     max-width: 100%;
     border-radius: 8px;
   }
+  .custom-bg-color {
+  background-color: #02331d;
+  color: white; /* Цвет текста */
+  font-family:'Courier New', Courier, monospace;
+}
+
+
   </style>
   

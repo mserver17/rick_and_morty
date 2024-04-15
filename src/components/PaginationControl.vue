@@ -1,10 +1,9 @@
 <template>
   <div class="PaginationControl">
-    <button @click="prevPage" :disabled="currentPage === 1">Previous</button>
+    <button type="button" class="btn btn-success" @click="prevPage" :disabled="currentPage === 1">Previous</button>
     <span>Page {{ currentPage }} of {{ totalPages }}</span>
-    <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+    <button type="button" class="btn btn-success" @click="nextPage" :disabled="currentPage === totalPages">Next</button>
   </div>
-  
 </template>
 
 <script>
@@ -48,7 +47,7 @@ button {
   padding: 5px 10px;
   cursor: pointer;
   border: 1px solid #ccc;
-  background-color: #f9f9f9;
+  background-color: #003918;
 }
 
 button:disabled {
